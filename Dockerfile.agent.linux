@@ -1,0 +1,22 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+ARG NEXUS_USERNAME
+ARG NEXUS_PASSWORD
+ARG HDIV_AGENT_VERSION
+WORKDIR /src
+COPY . .
+RUN dotnet nuget add source https://artifacts.hdivsecurity.com/nexus/service/local/nuget/nuget/ --name nexus --username $NEXUS_USERNAME --password $NEXUS_PASSWORD --store-password-in-clear-text && \
+    dotnet add package Hdiv.AST.Profiler --version $HDIV_AGENT_VERSION && \ 
+    dotnet restore && \
+    dotnet build -c Release -o /app/build && \ 
+    dotnet publish -c Release -o /app/publish
+
+FROM base AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+COPY --from=build /app/build/hdivsecurity ./hdivsecurity
+ENTRYPOINT ["dotnet", "insecure-bank-net.dll"]

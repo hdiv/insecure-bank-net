@@ -1,0 +1,147 @@
+﻿@page "{handler?}"
+@model insecure_bank_net.Pages.User.UserDetail
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<!-- WRAPPER -->
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar" />
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <partial name="Shared/_MainNav" />
+                </div>
+            </div>
+            <div class="col-lg-10 col-right ">
+                <div class="right-content">
+                    <!-- MAIN CONTENT -->
+                    <div class="main-content">
+                        <div class="primary-content">
+                            <div class="heading clearfix">
+                                <h2>USER DETAIL</h2>
+                                <ul class="breadcrumb pull-left">
+                                    <li>
+                                        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+                                    </li>
+                                    <li><a href="#">User detail</a></li>
+                                </ul>
+                            </div>
+	                        <div class="row">
+		                        <div class="col-sm-9">
+			                        <div class="col-sm-2">
+				                        <img id="userAvatarImage"  src="@Url.Page("/User/UserDetail","Avatar",new {name=Model.Account.Username + ".png" })" class="img-thumbnail" alt="avatar" style="border:solid 1px grey;cursor:pointer;"/>
+				                        <form id="userAvatarForm" asp-page-handler="update" method="POST" style="display:none" enctype="multipart/form-data">
+					                        <input id="userAvatarInput" type="file" asp-for="Upload"/>
+				                        </form>
+			                        </div>
+			                        <div class="col-sm-10">
+				                        <dl class="dl-horizontal">
+					                        <dt>Current Date:</dt>
+					                        <dd>@DateTime.Now.ToString("dd-MM-yyyy HH:mm")</dd>
+					                        <dt>Register Date:</dt>
+					                        <dd>20-09-2014</dd>
+					                        <dt>Username:</dt>
+					                        <dd>@Html.Raw(Model.Account.Username)</dd>
+					                        <dt>Name:</dt>
+					                        <dd>@Html.Raw(Model.Account.Name)</dd>
+					                        <dt>Surname:</dt>
+					                        <dd>@Html.Raw(Model.Account.Surname)</dd>
+					                        <dt>Account Type:</dt>
+					                        <dd>Personal</dd>
+					                        <dt>Account Status:</dt>
+					                        <dd>
+						                        <span class="label label-success">ACTIVE</span>
+					                        </dd>
+					                        <dt style="padding: 10px 0px 10px 0px;">Digital Certificate:</dt>
+					                        <dd style="padding: 10px 0px 10px 0px;">
+						                        <form asp-page-handler="Certificate" method="POST" class="form-horizontal" role="form">
+							                        <input type="hidden" asp-for="Username" />
+							                        <button type="submit">Download</button>
+						                        </form>
+					                        </dd>
+					                        <dt style="padding: 10px 0px 10px 0px;">Malicious Certificate:</dt>
+					                        <dd style="padding: 10px 0px 10px 0px;">
+						                        <form asp-page-handler="MaliciousCertificate" method="POST" class="form-horizontal" role="form">
+							                        <input type="hidden" asp-for="UsernameMalicious" />
+							                        <button type="submit">Download</button>
+						                        </form>
+					                        </dd>
+					                        <dt style="padding: 10px 0px 10px 0px;">
+						                        Upload
+						                        new certificate:
+					                        </dt>
+					                        <dd style="padding: 10px 0px 10px 0px;">
+
+						                        <form asp-page-handler="NewCertificate" method="POST" enctype="multipart/form-data">
+							                        <input id="file" type="file" asp-for="Upload"/>
+							                        <button type="submit" style="margin-top: 5px;">Upload</button>
+						                        </form>
+					                        </dd>
+
+					                        <dt>Credit cards:</dt>
+					                        <br>
+					                        <dd>
+						                        <div class="table-responsive">
+							                        <table class="table table-condensed">
+								                        <thead>
+									                        <tr>
+										                        <th>Cash Account</th>
+										                        <th>Description</th>
+									                        </tr>
+								                        </thead>
+								                        <tbody>
+															@foreach (var credit in Model.CreditAccounts)
+															{
+																<tr>
+																	<td>
+																		@{ string creditImage; }
+																		@if (credit.Description.Contains("Visa")) { creditImage = "visa.png"; }
+																		else if (credit.Description.Contains("AmEx")) { creditImage = "amex.png"; }
+																		else { creditImage = "mastercard.png"; }
+																		<img id="card-ico" src="@Url.Page("/User/UserDetail","CreditCardImage",new {name=creditImage })" class="img-thumbnail" alt="card" style="border:solid 1px grey;cursor:pointer;"/>
+																		@credit.Number
+																	</td>
+																	<td>@credit.Description</td>
+																</tr>
+															}
+								                        </tbody>
+							                        </table>
+						                        </div>
+					                        </dd>
+				                        </dl>
+			                        </div>
+		                        </div>
+	                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+    </div>
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Scripts {
+	<script>
+		$(function(){
+			$('#userAvatarImage').click(function(){
+				$('#userAvatarInput').click();
+			});
+			$('#userAvatarInput').change(function(){
+				$('#userAvatarForm').submit();
+			});
+		});
+	</script>
+}
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

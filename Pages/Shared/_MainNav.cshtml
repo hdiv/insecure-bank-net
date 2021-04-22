@@ -1,0 +1,44 @@
+﻿<nav id="main-nav" class="main-nav">
+
+    <h3>MAIN</h3>
+    <ul class="main-menu">
+        <spring:url value="/dashboard" var="index"/>
+        <spring:url value="/activity" var="activity"/>
+
+        @{
+            var pageRoute = ViewContext.RouteData.Values["page"].ToString();
+        }
+        <li class="@if (pageRoute == "/User/Dashboard") { @Html.Raw("active") }">
+            <a asp-page="/User/Dashboard">
+                <i class="icon ion-ios7-speedometer"></i><span class="text">Dashboard</span>
+            </a>
+        </li>
+        <li class="@if (pageRoute?.EndsWith("Activity") ?? false) { @Html.Raw("active") }">
+            <a asp-page="/User/AccountActivity">
+                <i class="icon ion-clipboard"></i><span class="text">Accounts activity</span>
+            </a>
+        </li>
+        @{ var transfer = pageRoute?.Contains("Transfer") ?? false; }
+        <li class="has-submenu @if (transfer) { @Html.Raw("active") }">
+            <a href="#" class="submenu-toggle">
+                <i class="icon ion-android-note"></i><span class="text">Transfers</span>
+            </a>
+            <ul class="list-unstyled sub-menu collapse">
+                <li class="@if (transfer) { @Html.Raw("active") } ">
+                    <a asp-page="/User/NewTransfer">
+                        <span class="text">Make a transfer</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        @if (pageRoute?.Contains("/User/Admin") ?? false)
+        {
+            <li class="active">
+                <a asp-page="/User/Admin">
+                    <i class="icon ion-android-contact"></i><span class="text">Admin</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+

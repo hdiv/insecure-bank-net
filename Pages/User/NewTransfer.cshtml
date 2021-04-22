@@ -1,0 +1,114 @@
+﻿@page "{handler?}"
+@model insecure_bank_net.Pages.User.NewTransfer
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<!-- WRAPPER -->
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar" />
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <partial name="Shared/_MainNav" />
+                </div>
+            </div>
+            <div class="col-lg-10 col-right ">
+                <div class="right-content">
+                    <!-- MAIN CONTENT -->
+                    <div class="main-content">
+                        <div class="primary-content">
+                            <div class="heading clearfix">
+                                <h2>MAKE A TRANSFER</h2>
+                                <ul class="breadcrumb pull-left">
+                                    <li>
+                                        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+                                    </li>
+                                    <li>
+                                        <a asp-page="/User/NewTransfer">Transfers</a>
+                                    </li>
+                                    <li>
+                                        <a asp-page="/User/NewTransfer">Make a transfer</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- RESPONSIVE TABLE -->
+                            <div class="widget">
+                                <div class="widget-header clearfix">
+                                    <h3>
+                                        <i class="fa fa-list-alt"></i> <span>NEW TRANSFER</span>
+                                    </h3>
+                                </div>
+                                <div class="widget-content">
+                                    <form method="post" class="form-horizontal" role="form" asp-page-handler="transfer">
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">From Account</label>
+                                            <div class="col-md-10">
+                                                <select asp-for="Transfer.FromAccount" asp-items="Model.CashAccounts" class="form-control">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">Send To</label>
+                                            <div class="col-md-10">
+                                                <input asp-for="Transfer.ToAccount" type="text" class="form-control" required="required"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">Description</label>
+                                            <div class="col-md-10">
+                                                <input asp-for="Transfer.Description" type="text" class="form-control" required="required"/>
+                                                @foreach (var modelError in Html.ViewData.ModelState.Where(it => it.Key == "Input.Description").SelectMany(keyValuePair => keyValuePair.Value.Errors))
+                                                {
+                                                    <span class="text-danger">@modelError.ErrorMessage</span>
+                                                }
+                                                <form:errors path="description" cssClass="text-danger"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group ${error eq true  ? 'has-error has-feedback' : ''}">
+                                            <label class="col-sm-2 control-label">Amount</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <input asp-for="Transfer.Amount" type="text" class="form-control"/>
+                                                    <span class="input-group-addon">&#8364;</span>
+                                                </div>
+                                                @foreach (var modelError in Html.ViewData.ModelState.Where(it => it.Key == "Input.Amount").SelectMany(keyValuePair => keyValuePair.Value.Errors))
+                                                {
+                                                    <span class="text-danger">@modelError.ErrorMessage</span>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <div class="pull-right">
+                                                    <button type="submit" class="btn btn-primary">Send</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+    </div>
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

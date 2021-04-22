@@ -1,0 +1,49 @@
+﻿version: "3.7"
+services:
+  insecure-bank:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:80  
+    restart: unless-stopped
+    
+  insecure-bank-agent-windows:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent.windows
+      args:
+        NEXUS_USERNAME: ${NEXUS_USERNAME}
+        NEXUS_PASSWORD: ${NEXUS_PASSWORD}
+        HDIV_AGENT_VERSION: ${HDIV_AGENT_VERSION}
+    environment:
+      CORECLR_ENABLE_PROFILING: 1
+      CORECLR_PROFILER: "{1adbf8d7-8774-4733-aa10-4376ba3bd37a}"
+      CORECLR_PROFILER_PATH_64: C:\\app\\hdivsecurity\\agent\\x64\\Hdiv.AST.Clr.Profiler.dll
+      HDIV_AGENT_HOME: C:\\app\\hdivsecurity\\agent
+      HDIV_AGENT_PROFILER_PLATFORM: 327680
+      HDIV_LICENSE_DATA: ${HDIV_LICENSE_DATA}
+      HDIV_TOOLBAR_ENABLED: "true"
+    ports:
+      - 5000:80
+    restart: unless-stopped    
+
+  insecure-bank-agent-linux:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent.linux
+      args:
+        NEXUS_USERNAME: ${NEXUS_USERNAME}
+        NEXUS_PASSWORD: ${NEXUS_PASSWORD}
+        HDIV_AGENT_VERSION: ${HDIV_AGENT_VERSION}
+    environment:
+      CORECLR_ENABLE_PROFILING: 1
+      CORECLR_PROFILER: "{1adbf8d7-8774-4733-aa10-4376ba3bd37a}"
+      CORECLR_PROFILER_PATH_64: /app/hdivsecurity/agent/x64/Hdiv.AST.Clr.Profiler.so
+      HDIV_AGENT_HOME: /app/hdivsecurity/agent
+      HDIV_AGENT_PROFILER_PLATFORM: 327680
+      HDIV_LICENSE_DATA: ${HDIV_LICENSE_DATA}
+    ports:
+      - 5000:80
+    restart: unless-stopped    
+

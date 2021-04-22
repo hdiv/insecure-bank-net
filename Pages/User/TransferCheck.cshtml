@@ -1,0 +1,106 @@
+﻿@model NewTransfer
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<div class="wrapper">
+	<div class="container-fluid">
+		<!-- TOP BAR -->
+		<partial name="Shared/_TopBar" />
+		<!-- END TOP BAR -->
+		<div class="row">
+			<div class="col-lg-2 col-left">
+				<!-- LEFT CONTENT -->
+				<div class="left-content">
+					 <partial name="Shared/_MainNav" />
+				</div>
+			</div>
+			<div class="col-lg-10 col-right ">
+				<div class="right-content">
+					<!-- MAIN CONTENT -->
+					<div class="main-content">
+						<div class="primary-content">
+							<div class="heading clearfix">
+								<h2>MAKE A TRANSFER</h2>
+							</div>
+
+							<div class="widget-content">
+								<h4>DETAILS CONFIRMATION</h4>
+								<table id="user" class="table table-bordered table-striped">
+									<tbody>
+									<tr>
+										<td>
+											<label class="col-md-4 control-label">From Account</label>
+										</td>
+										<td>
+											@Model.Transfer.FromAccount
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="col-md-4 control-label">Send To</label>
+										</td>
+										<td>
+											@Model.Transfer.ToAccount
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="col-md-4 control-label">Description</label>
+										</td>
+										<td>@Html.Raw(Model.Transfer.Description)</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="col-md-4 control-label">Amount</label>
+										</td>
+										<td>@($"{Model.Transfer.Amount:N}") &#8364;</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="col-md-4 control-label">Fee</label>
+										</td>
+										<td>@($"{Model.Transfer.Fee:N}") &#8364;</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<!-- RESPONSIVE TABLE -->
+							<div class="widget">
+								<div class="widget-header clearfix">
+									<h3>
+										<i class="fa fa-list-alt"></i> <span>Find the number 243 and enter the corresponding code:</span>
+									</h3>
+								</div>
+								<div class="widget-content">
+									<form method="post" class="form-horizontal" role="form" asp-page="/User/NewTransfer" asp-page-handler="confirm">
+										<div class="form-group">
+											<label class="col-md-2 control-label">Code</label>
+											<div class="col-md-1">
+												<input asp-for="Confirm.Code" type="text" class="form-control" maxlength="4"/>
+											</div>
+											<div class="col-md-6">
+												<input asp-for="Confirm.Action" type="submit" class="btn btn-primary" value="Confirm" />
+												<input asp-for="Confirm.Action" type="submit" class="btn btn-primary" value="Cancel" />
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+		</div>
+	</div>
+
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+	<partial name="Shared/_Styles"/>
+}

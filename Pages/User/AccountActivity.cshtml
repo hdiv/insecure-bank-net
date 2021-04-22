@@ -1,0 +1,109 @@
+﻿@page "{number?}"
+@model insecure_bank_net.Pages.User.AccountActivity
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<!-- WRAPPER -->
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar" />
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <partial name="Shared/_MainNav" />
+                </div>
+            </div>
+            <div class="col-lg-10 col-right ">
+                <div class="right-content">
+                    <!-- MAIN CONTENT -->
+                    <div class="main-content">
+                        <div class="primary-content">
+                            <div class="heading clearfix">
+                                <h2>ACCOUNTS ACTIVITY</h2>
+                                <ul class="breadcrumb pull-left">
+                                    <li>
+                                        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Accounts activity</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="form-group">
+                                <form method="post">
+                                    <label class="col-md-2 control-label" style=" padding-top: 7px; text-align: center;">Account</label>
+                                    <div class="input-group">
+                                        <select asp-for="Number" asp-items="Model.CashAccounts" class="form-control">
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-primary">Go</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="widget">
+                                <div class="widget-header clearfix">
+                                    <h3>
+                                        <i class="icon ion-clipboard"></i> <span>ACTIVITY SUMARY | @Model.ActualCashAccountNumber</span>
+                                    </h3>
+                                </div>
+                                <div class="widget-content">
+                                    <table class="table table-bordered  colored-header">
+                                        <thead>
+                                        <tr>
+                                            <th>Date</th><th>Description</th><th>Deposits</th><th>Withdrawals</th><th>Ending Balance</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var firstCashAccountTransfer in Model.FirstCashAccountTransfers)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @firstCashAccountTransfer.Date.ToString("dd-MM-yyyy HH:mm")
+                                                    </td>
+                                                    <td>
+                                                        @Html.Raw(firstCashAccountTransfer.Description)
+                                                    </td>
+                                                    @if (firstCashAccountTransfer.Amount > 0)
+                                                    {
+                                                        <td>+@($"{firstCashAccountTransfer.Amount:N}") EUR</td>
+                                                        <td></td>
+                                                    }
+                                                    @if (firstCashAccountTransfer.Amount < 0)
+                                                    {
+                                                        <td></td>
+                                                        <td>@($"{firstCashAccountTransfer.Amount:N}") EUR</td>
+                                                    } 
+                                                    <td>
+                                                        @if (firstCashAccountTransfer.Availablebalance > 0) { @Html.Raw("+") }@($"{firstCashAccountTransfer.Availablebalance:N}") EUR
+                                                    </td>
+                                                </tr>   
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+    </div>
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

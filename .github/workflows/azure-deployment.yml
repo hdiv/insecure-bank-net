@@ -1,0 +1,43 @@
+name: Azure App Service - insecure-bank
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    env:
+      HDIV_AGENT_VERSION: 2.6.4.2
+
+    steps:
+    # checkout the repo
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.301'
+
+    - name: Build with dotnet
+      run: |
+        dotnet nuget add source https://artifacts.hdivsecurity.com/nexus/service/local/nuget/nuget/ --name nexus --username ${{ secrets.NEXUS_USERNAME }} --password ${{ secrets.NEXUS_PASSWORD }} --store-password-in-clear-text
+        dotnet add package Hdiv.AST.Profiler --version ${{ env.HDIV_AGENT_VERSION }}
+        dotnet restore
+        dotnet build --configuration Release
+
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/publish
+
+    - name: Run Azure webapp deploy action using publish profile credentials
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: insecure-bank
+        slot-name: Production
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E86A3E3408354E49A6D3B0629F6D0F2C }}
+        package: ${{env.DOTNET_ROOT}}/publish
+
