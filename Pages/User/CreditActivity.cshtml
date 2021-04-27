@@ -1,0 +1,81 @@
+﻿@page
+@model insecure_bank_net.Pages.User.CreditActivity
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<!-- WRAPPER -->
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar" />
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <partial name="Shared/_MainNav" />
+                </div>
+            </div>
+            <div class="col-lg-10 col-right ">
+                <div class="right-content">
+                    <!-- MAIN CONTENT -->
+                    <div class="main-content">
+                        <div class="primary-content">
+                            <div class="heading clearfix">
+                                <h2>CREDIT CARD ACTIVITY</h2>
+                                <ul class="breadcrumb pull-left">
+                                    <li>
+                                        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Credit card activity</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="widget">
+                                <div class="widget-header clearfix">
+                                    <h3>
+                                        <i class="icon ion-clipboard"></i> <span>ACTIVITY SUMARY | @Model.ActualCreditCardNumber</span>
+                                    </h3>
+                                </div>
+                                <div class="widget-content">
+                                    <table class="table table-bordered  colored-header">
+                                        <thead>
+                                        <tr>
+                                            <th>Date</th><th>Description</th><th>Charge</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>14-04-2017</td>
+                                            <td>Amazon Inc.</td>
+                                            <td>@($"{120.30:N}") EUR</td>
+                                        </tr>
+                                        <tr>
+                                            <td>13-04-2017</td>
+                                            <td>Vodafone</td>
+                                            <td>@($"{20.10:N}") EUR</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+    </div>
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

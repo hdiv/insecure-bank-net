@@ -1,0 +1,93 @@
+﻿@page
+@model insecure_bank_net.Pages.User.Admin
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<!-- WRAPPER -->
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar" />
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <div class="left-content">
+						<partial name="Shared/_MainNav" />
+					</div>
+                </div>
+            </div>
+	        <div class="col-lg-10 col-right ">
+		        <div class="right-content">
+			        <div class="main-content">
+				        <div class="primary-content">
+					        <div class="heading clearfix">
+						        <h2>ADMIN PANEL</h2>
+						        <ul class="breadcrumb pull-left">
+							        <li>
+								        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+							        </li>
+							        <li>
+								        <a href="#">Admin</a>
+							        </li>
+						        </ul>
+					        </div>
+					        <!-- RESPONSIVE TABLE -->
+					        <div class="widget">
+						        <div class="widget-header clearfix">
+							        <h3>
+								        <i class="fa fa-list-alt"></i> <span>Bank Users</span>
+							        </h3>
+						        </div>
+						        <div class="widget-content">
+							        <div class="table-responsive">
+								        <table class="table table-condensed">
+									        <thead>
+									        <tr>
+										        <th>Username</th>
+										        <th>Name</th>
+										        <th>Surname</th>
+									        </tr>
+									        </thead>
+									        <tbody>
+									        @foreach (var account in Model.Accounts)
+									        {
+										        <tr>
+											        <td>
+												        @account.Username
+											        </td>
+											        <td>
+												        @account.Name
+											        </td>
+											        <td>
+												        @account.Surname
+											        </td>
+										        </tr>
+									        }
+									        </tbody>
+								        </table>
+							        </div>
+						        </div>
+					        </div>
+					        <!-- END RESPONSIVE TABLE -->
+
+				        </div>
+			        </div>
+
+
+		        </div>
+	        </div>
+        </div>
+        <!-- END MAIN CONTENT -->
+    </div>
+
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

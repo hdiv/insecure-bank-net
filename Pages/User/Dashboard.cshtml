@@ -1,0 +1,143 @@
+﻿@page
+@model insecure_bank_net.Pages.User.Dashboard
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<!-- WRAPPER -->
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar" />
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <partial name="Shared/_MainNav" />
+                </div>
+            </div>
+            <div class="col-lg-10 col-right ">
+                <div class="right-content">
+                    <!-- MAIN CONTENT -->
+                    <div class="main-content">
+                        <div class="primary-content">
+                            <div class="heading clearfix">
+                                <h2>DASHBOARD</h2>
+                                <ul class="breadcrumb pull-left">
+                                    <li>
+                                        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Dashboard</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- RESPONSIVE TABLE -->
+                            <div class="widget">
+                                <div class="widget-header clearfix">
+                                    <h3>
+                                        <i class="fa fa-list-alt"></i> <span>CASH ACCOUNTS</span>
+                                    </h3>
+                                </div>
+                                <div class="widget-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cash Account</th>
+                                                    <th>Description</th>
+                                                    <th>Available Balance</th>
+                                                    <th style="width: 140px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var cash in Model.CashAccounts)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @cash.Number
+                                                        </td>
+                                                        <td>
+                                                            @cash.Description
+                                                        </td>
+                                                        <td>
+                                                            @if (cash.Availablebalance > 0) { @Html.Raw("+") }@($"{cash.Availablebalance:N}") EUR
+                                                        </td>
+                                                        <td>
+                                                            <a href="@Html.Raw("/User/AccountActivity/" + cash.Number)" class="btn btn-primary btn-xs">
+                                                                <i class="fa fa-search"></i> View activity
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END RESPONSIVE TABLE -->
+                            <!-- RESPONSIVE TABLE -->
+                            <div class="widget">
+                                <div class="widget-header clearfix">
+                                    <h3>
+                                        <i class="fa fa-credit-card"></i> <span>CREDIT ACCOUNTS</span>
+                                    </h3>
+                                </div>
+                                <div class="widget-content">
+                                    <div class="table-responsive">
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cash Account</th>
+                                                    <th>Description</th>
+                                                    <th>Available Balance</th>
+                                                    <th style="width: 140px;"></th>
+                                                </tr>
+                                                </thead>
+                                            <tbody>
+                                                @foreach (var credit in Model.CreditAccounts)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @if (credit.Description.Contains("Visa")) { <i class="fa fa-cc-visa"></i> }
+                                                            else if (credit.Description.Contains("AmEx")) { <i class="fa fa-cc-amex"></i> }
+                                                            else if (credit.Description.Contains("Master")) { <i class="fa fa-cc-mastercard"></i> }
+                                                            @credit.Number
+                                                        </td>
+                                                        <td>
+                                                            @credit.Description
+                                                        </td>
+                                                        <td>
+                                                            @if (credit.Availablebalance > 0) { @Html.Raw("+") }@($"{credit.Availablebalance:N}") EUR
+                                                        </td>
+                                                        <td>
+                                                            <a href="@Html.Raw("/User/CreditActivity?number=" + credit.Number)" class="btn btn-primary btn-xs">
+                                                                <i class="fa fa-search"></i> View activity
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END RESPONSIVE TABLE -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+    </div>
+
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

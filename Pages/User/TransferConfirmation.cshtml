@@ -1,0 +1,107 @@
+﻿@model NewTransfer
+
+@{
+    ViewData["BodyClass"] = "static-tables";
+}
+
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- TOP BAR -->
+        <partial name="Shared/_TopBar"/>
+        <!-- END TOP BAR -->
+        <div class="row">
+            <div class="col-lg-2 col-left">
+                <!-- LEFT CONTENT -->
+                <div class="left-content">
+                    <partial name="Shared/_MainNav"/>
+                </div>
+            </div>
+            <div class="col-lg-10 col-right ">
+                <div class="right-content">
+                    <!-- MAIN CONTENT -->
+                    <div class="main-content">
+                        <div class="primary-content">
+                            <div class="heading clearfix">
+                                <h2>MAKE A TRANSFER</h2>
+                                <ul class="breadcrumb pull-left">
+                                    <li>
+                                        <i class="icon ion-home"></i><a asp-page="/User/Dashboard">Home</a>
+                                    </li>
+                                    <li>
+                                        <a asp-page="/User/NewTransfer">Transfers</a>
+                                    </li>
+                                    <li>
+                                        <a asp-page="/User/NewTransfer">Make a transfer</a>
+                                    </li>
+                                    <li>Transfer confirmation</li>
+                                </ul>
+
+                            </div>
+
+                            <!-- RESPONSIVE TABLE -->
+
+                            <div class="widget">
+                                <div class="widget-header clearfix">
+                                    <h3>
+                                        <i class="icon ion-compose"></i> <span>TRANSFER CONFIRMATION</span>
+                                    </h3>
+                                </div>
+                                <div class="widget-content">
+                                    <div class="alert alert-success fade in">
+                                        <button class="close" data-dismiss="alert">&times;</button>
+                                        <i class="icon ion-checkmark-circled"></i>
+                                        <strong>Success!</strong> You have successfully made the transfer.
+                                    </div>
+                                    <table id="user" class="table table-bordered table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td><label class="col-md-2 control-label">From</label></td>
+                                                <td>@Model.Account.Name @Model.Account.Surname</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">Account Type</label></td>
+                                                <td>@Model.Type</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">From Account</label></td>
+                                                <td>@Model.Transfer.FromAccount</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">Send To</label></td>
+                                                <td>@Model.Transfer.ToAccount</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">Description</label></td>
+                                                <td>@Model.Transfer.Description</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">Amount</label></td>
+                                                <td>@($"{Model.Transfer.Amount:N}") &#8364;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">Fee</label></td>
+                                                <td>@($"{Model.Transfer.Fee:N}") &#8364;</td>
+                                            </tr>
+                                            <tr>
+                                                <td><label class="col-md-4 control-label">Date</label></td>
+                                                <td> @Model.Transfer.Date.ToString("dd-MM-yyyy HH:mm")</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+    </div>
+
+</div>
+<div class="left-content-bg col-md-2"></div>
+<!-- END WRAPPER -->
+
+@section Styles {
+    <partial name="Shared/_Styles"/>
+}

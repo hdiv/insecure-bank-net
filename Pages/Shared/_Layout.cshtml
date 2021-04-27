@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie ie9" lang="en" class="no-js"> <![endif]-->
+<!--[if !(IE)]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+<html lang="en">
+<head>
+    <title>Insecure Bank</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Insecure Bank">
+    <meta name="author" content="The Develovers">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/ionicons.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/main.css" rel="stylesheet" type="text/css">
+    <link href="~/css/skins/blue-light-nav.css" rel="stylesheet" type="text/css">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Google Fonts -->
+    <link href='~/css/google-fonts.css' rel='stylesheet' type='text/css'>
+    
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/ico/queenadmin-favicon144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/ico/queenadmin-favicon114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/ico/queenadmin-favicon72x72.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="~/ico/queenadmin-favicon57x57.png">
+    <link rel="shortcut icon" href="~/ico/favicon.ico">
+    
+</head>
+<body class="@ViewData["BodyClass"]">
+    
+    @RenderBody()
+
+    <!-- Javascript -->
+    <script src="~/js/jquery/jquery-2.1.0.min.js"></script>
+    <script src="~/js/bootstrap/bootstrap.js"></script>
+    <script src="~/js/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/js/plugins/stat/jquery-easypiechart/jquery.easypiechart.min.js"></script>
+    <script src="~/js/plugins/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+    <script src="~/js/queen-common.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+@RenderSection("Styles", required: false)
+</html>
