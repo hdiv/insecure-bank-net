@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using insecure_bank_net.Dao;
 using insecure_bank_net.Data;
 using insecure_bank_net.Facade;
@@ -17,6 +19,8 @@ namespace insecure_bank_net
     public class Startup
     {
         private IConfiguration Configuration { get; }
+
+        private IEnumerable<string> VulnerableAssemblies => new List<string> {"Sustainsys.Saml2"};
 
         public Startup(IConfiguration configuration)
         {
@@ -84,6 +88,7 @@ namespace insecure_bank_net
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
             PopulateDatabase(context);
+            LoadAssemblies(VulnerableAssemblies);
         }
 
         private void PopulateDatabase(ApplicationDbContext context)
@@ -101,6 +106,14 @@ namespace insecure_bank_net
                 {
                     context.Database.ExecuteSqlRaw(item);
                 }
+            }
+        }
+
+        private void LoadAssemblies(IEnumerable<string> assemblies)
+        {
+            foreach (var assembly in assemblies)
+            {
+                Assembly.Load(assembly);                
             }
         }
     }
