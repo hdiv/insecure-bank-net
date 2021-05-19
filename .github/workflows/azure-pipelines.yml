@@ -1,0 +1,48 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  agentVersion: '2.6.4.2'
+  projectDirectory: '.'
+  WebAppName: 'InsecureBank'
+
+steps:
+- task: CmdLine@2
+  inputs:
+    script: dotnet nuget add source https://artifacts.hdivsecurity.com/nexus/service/local/nuget/nuget/ --name nexus --username $(nexusUsername) --password $(nexusPassword) --store-password-in-clear-text | dotnet add package Hdiv.AST.Profiler --version $(agentVersion)
+    workingDirectory: '$(projectDirectory)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
+    WebAppName: '$(WebAppName)'
+    AppSettings: -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_32 D:\Home\site\wwwroot\hdivsecurity\agent\x86\Hdiv.AST.Clr.Profiler.dll -CORECLR_PROFILER_PATH_64 D:\Home\site\wwwroot\hdivsecurity\agent\x64\Hdiv.AST.Clr.Profiler.dll -HDIV_AGENT_HOME D:\Home\site\wwwroot\hdivsecurity\agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_TOOLBAR_ENABLED true
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+
