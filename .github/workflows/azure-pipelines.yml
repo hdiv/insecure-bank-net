@@ -16,6 +16,9 @@ variables:
   agentVersion: '2.6.4.2'
   projectDirectory: '.'
   WebAppName: 'InsecureBank'
+  ConsoleURL: 'http://localhost:8089/hdiv-console-services'
+  ConsoleToken: 'e781990ff291c0D693c45fd3'
+  EnableToolbar: 'false'
 
 steps:
 - task: CmdLine@2
@@ -36,6 +39,6 @@ steps:
     azureSubscription: '$(azureSubscription)'
     appType: 'webApp'
     WebAppName: '$(WebAppName)'
-    AppSettings: -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_32 D:\Home\site\wwwroot\hdivsecurity\agent\x86\Hdiv.AST.Clr.Profiler.dll -CORECLR_PROFILER_PATH_64 D:\Home\site\wwwroot\hdivsecurity\agent\x64\Hdiv.AST.Clr.Profiler.dll -HDIV_AGENT_HOME D:\Home\site\wwwroot\hdivsecurity\agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_TOOLBAR_ENABLED true
+    AppSettings: -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_32 D:\Home\site\wwwroot\hdivsecurity\agent\x86\Hdiv.AST.Clr.Profiler.dll -CORECLR_PROFILER_PATH_64 D:\Home\site\wwwroot\hdivsecurity\agent\x64\Hdiv.AST.Clr.Profiler.dll -HDIV_AGENT_HOME D:\Home\site\wwwroot\hdivsecurity\agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_TOOLBAR_ENABLED $(EnableToolbar) -HDIV_CONSOLE_URL $(ConsoleURL) -HDIV_CONSOLE_TOKEN $(ConsoleToken) 
     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
 
