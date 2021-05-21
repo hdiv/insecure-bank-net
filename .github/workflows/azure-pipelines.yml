@@ -15,7 +15,7 @@ variables:
   buildConfiguration: 'Release'
   agentVersion: '2.6.4.2' #Agent version that is going to be used
   projectDirectory: '.' #path to one project in your solution
-  WebAppName: 'InsecureBank' #your app service name
+  WebAppName: 'insecure-bank' #your app service name
   ConsoleURL: 'http://localhost:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
   ConsoleToken: 'e781990ff291c0D693c45fd3' #console token provided by Hdiv
   EnableToolbar: 'false' #Set value to 'true' to enable the toolbar 
