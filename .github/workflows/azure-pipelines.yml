@@ -15,11 +15,11 @@ variables:
   buildConfiguration: 'Release'
   agentVersion: '2.6.4.2' #Agent version that is going to be used
   projectDirectory: '.' #path to one project in your solution
-  WebAppName: 'insecure-bank' #your app service name
-  ConsoleURL: 'http://localhost:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
-  ConsoleToken: 'e781990ff291c0D693c45fd3' #console token provided by Hdiv
-  EnableToolbar: 'false' #Set value to 'true' to enable the toolbar 
-  ServerName: 'serverName2' #Select a name for your server
+  webAppName: 'insecure-bank' #your app service name
+  consoleURL: 'http://localhost:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
+  consoleToken: 'e781990ff291c0D693c45fd3' #console token provided by Hdiv
+  enableToolbar: 'false' #Set value to 'true' to enable the toolbar 
+  serverName: 'serverName2' #Select a name for your server
 
 steps:
 - task: CmdLine@2
@@ -39,7 +39,7 @@ steps:
     ConnectionType: 'AzureRM'
     azureSubscription: '$(azureSubscription)'
     appType: 'webApp'
-    WebAppName: '$(WebAppName)'
-    AppSettings: -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_32 D:\Home\site\wwwroot\hdivsecurity\agent\x86\Hdiv.AST.Clr.Profiler.dll -CORECLR_PROFILER_PATH_64 D:\Home\site\wwwroot\hdivsecurity\agent\x64\Hdiv.AST.Clr.Profiler.dll -HDIV_AGENT_HOME D:\Home\site\wwwroot\hdivsecurity\agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_TOOLBAR_ENABLED $(EnableToolbar) -HDIV_CONSOLE_URL $(ConsoleURL) -HDIV_CONSOLE_TOKEN $(ConsoleToken) -HDIV_SERVER_NAME $(ServerName)
+    WebAppName: '$(webAppName)'
+    AppSettings: -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_32 D:\Home\site\wwwroot\hdivsecurity\agent\x86\Hdiv.AST.Clr.Profiler.dll -CORECLR_PROFILER_PATH_64 D:\Home\site\wwwroot\hdivsecurity\agent\x64\Hdiv.AST.Clr.Profiler.dll -HDIV_AGENT_HOME D:\Home\site\wwwroot\hdivsecurity\agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_TOOLBAR_ENABLED $(enableToolbar) -HDIV_CONSOLE_URL $(consoleURL) -HDIV_CONSOLE_TOKEN $(consoleToken) -HDIV_SERVER_NAME $(serverName)
     packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
 
