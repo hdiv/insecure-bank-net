@@ -16,10 +16,10 @@ variables:
   agentVersion: '2.6.4.2' #Agent version that is going to be used
   projectDirectory: '.' #path to one project in your solution
   webAppName: 'insecure-bank' #your app service name
-  consoleURL: 'http://localhost:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
-  consoleToken: 'e781990ff291c0D693c45fd3' #console token provided by Hdiv
+  consoleURL: 'http://console-host:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
+  consoleToken: 'token-value' #console token provided by Hdiv
   enableToolbar: 'false' #Set value to 'true' to enable the toolbar 
-  serverName: 'serverName2' #Select a name for your server
+  serverName: 'serverName' #Select a name for your server
 
 steps:
 - task: CmdLine@2
