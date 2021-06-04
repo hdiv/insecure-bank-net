@@ -18,7 +18,7 @@ variables:
   webAppName: 'insecure-bank' #your app service name
   consoleURL: 'http://console-host:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
   consoleToken: 'token-value' #console token provided by Hdiv
-  enableToolbar: 'true' #Set value to 'true' to enable the toolbar 
+  enableToolbar: 'false' #Set value to 'true' to enable the toolbar 
   serverName: 'serverName' #Select a name for your server
   isLinux: 'false' #Set to true if you app service runs under linux
   
