@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +32,11 @@ namespace insecure_bank_net
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
+            var SqLiteConnection = new SqliteConnection(Configuration.GetConnectionString("DefaultConnection"));
+            SqLiteConnection.Open();
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(SqLiteConnection));
 
             services.AddScoped(typeof(IAccountDao), typeof(AccountDaoImpl));
             services.AddScoped(typeof(IActivityDao), typeof(ActivityDaoImpl));
@@ -93,9 +97,8 @@ namespace insecure_bank_net
 
         private void PopulateDatabase(ApplicationDbContext context)
         {
-            using var conn = context.Database.GetDbConnection();
-            conn.Open();
-            using var command = conn.CreateCommand();
+            ApplicationDbContext.connection = context.Database.GetDbConnection();
+            using var command = ApplicationDbContext.connection.CreateCommand();
             command.CommandText = "select count(*) from account";
             if (int.Parse(command.ExecuteScalar().ToString()!) == 0)
             {

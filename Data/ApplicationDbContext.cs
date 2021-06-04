@@ -1,10 +1,13 @@
 ﻿using insecure_bank_net.Bean;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
 
 namespace insecure_bank_net.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        public static DbConnection connection { get; set;}
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

@@ -1,0 +1,71 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  agentVersion: '2.6.4.2' #Agent version that is going to be used
+  projectDirectory: '.' #path to one project in your solution
+  webAppName: 'insecure-bank' #your app service name
+  consoleURL: 'http://console-host:8089/hdiv-console-services' #Console address. Set to empty if you do not want to use the console
+  consoleToken: 'token-value' #console token provided by Hdiv
+  enableToolbar: 'false' #Set value to 'true' to enable the toolbar 
+  serverName: 'serverName' #Select a name for your server
+  isLinux: 'false' #Set to true if you app service runs under linux
+  
+steps:
+- task: CmdLine@2
+  inputs:
+    script: dotnet nuget add source https://artifacts.hdivsecurity.com/nexus/service/local/nuget/nuget/ --name nexus --username $(nexusUsername) --password $(nexusPassword) --store-password-in-clear-text | dotnet add package Hdiv.AST.Profiler --version $(agentVersion)
+    workingDirectory: '$(projectDirectory)'
+
+- task: VSBuild@1
+  condition: eq(lower(variables.isLinux),'false')
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  condition: eq(lower(variables.isLinux),'true')
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  condition: eq(lower(variables.isLinux),'true')
+  inputs:
+    command: 'publish'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) -r linux-x64'
+    publishWebProjects: true
+    zipAfterPublish: True
+
+- task: AzureRmWebAppDeployment@4
+  condition: eq(lower(variables.isLinux),'false')
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
+    WebAppName: '$(webAppName)'
+    AppSettings: -HDIV_TOOLBAR_ENABLED $(enableToolbar) -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_32 D:\Home\site\wwwroot\hdivsecurity\agent\x86\Hdiv.AST.Clr.Profiler.dll -CORECLR_PROFILER_PATH_64 D:\Home\site\wwwroot\hdivsecurity\agent\x64\Hdiv.AST.Clr.Profiler.dll -HDIV_AGENT_HOME D:\Home\site\wwwroot\hdivsecurity\agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_CONSOLE_URL $(consoleURL) -HDIV_CONSOLE_TOKEN $(consoleToken) -HDIV_SERVER_NAME $(serverName)
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+
+- task: AzureWebApp@1
+  condition: eq(lower(variables.isLinux),'true')
+  inputs:
+    azureSubscription: $(azureSubscription)
+    appType: 'webAppLinux'
+    appName: $(webAppName)
+    AppSettings: -HDIV_TOOLBAR_ENABLED $(enableToolbar) -CORECLR_ENABLE_PROFILING 1 -CORECLR_PROFILER {1adbf8d7-8774-4733-aa10-4376ba3bd37a} -CORECLR_PROFILER_PATH_64 /home/site/wwwroot/hdivsecurity/agent/x64/Hdiv.AST.Clr.Profiler.so -HDIV_AGENT_HOME /home/site/wwwroot/hdivsecurity/agent -HDIV_AGENT_PROFILER_PLATFORM 327680 -HDIV_LICENSE_DATA $(licenseData) -HDIV_CONSOLE_URL $(consoleURL) -HDIV_CONSOLE_TOKEN $(consoleToken) -HDIV_SERVER_NAME $(serverName)
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
