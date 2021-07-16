@@ -23,7 +23,8 @@ services:
       HDIV_AGENT_HOME: C:\\app\\hdivsecurity\\agent
       HDIV_AGENT_PROFILER_PLATFORM: 327680
       HDIV_LICENSE_DATA: ${HDIV_LICENSE_DATA}
-      HDIV_TOOLBAR_ENABLED: "true"
+      HDIV_TOOLBAR_ENABLED: "false"
+      HDIV_FILE_LEVEL: "FINE"
     ports:
       - 5000:80
     restart: unless-stopped    
@@ -43,6 +44,8 @@ services:
       HDIV_AGENT_HOME: /app/hdivsecurity/agent
       HDIV_AGENT_PROFILER_PLATFORM: 327680
       HDIV_LICENSE_DATA: ${HDIV_LICENSE_DATA}
+      HDIV_TOOLBAR_ENABLED: "false"
+      HDIV_FILE_LEVEL: "FINE"
     ports:
       - 5000:80
     restart: unless-stopped    
