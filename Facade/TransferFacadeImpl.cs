@@ -8,17 +8,14 @@ namespace insecure_bank_net.Facade
     public class TransferFacadeImpl : ITransferFacade
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly ICashAccountDao cashAccountDao;
-        private readonly ICreditAccountDao creditAccountDao;
-        private readonly IActivityDao activityDao;
+        private ICashAccountDao CashAccountDao => new CashAccountDaoImpl(dbContext);
+        private ICreditAccountDao CreditAccountDao => new CreditAccountDaoImpl(dbContext);
+        private IActivityDao ActivityDao => new ActivityDaoImpl(dbContext);
+        private ITransferDao TransferDao => new TransferDaoImpl(dbContext);
 
-        public TransferFacadeImpl(ApplicationDbContext dbContext, ICashAccountDao cashAccountDao,
-            ICreditAccountDao creditAccountDao, IActivityDao activityDao)
+        public TransferFacadeImpl(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.cashAccountDao = cashAccountDao;
-            this.creditAccountDao = creditAccountDao;
-            this.activityDao = activityDao;
         }
 
         public void CreateNewTransfer(Transfer transfer)
@@ -41,11 +38,13 @@ namespace insecure_bank_net.Facade
 
         private void InsertTransfer(Transfer transfer)
         {
-            new TransferDaoImpl(dbContext).InsertTransfer(transfer);
+            var transferDao = TransferDao;
+            transferDao.InsertTransfer(transfer);
         }
 
         private void UpdateFromAccounts(Transfer transfer)
         {
+            var cashAccountDao = CashAccountDao;
             var actualAmount = cashAccountDao.GetFromAccountActualAmount(transfer.FromAccount);
             var amountTotal = actualAmount - (transfer.Amount + transfer.Fee);
 
@@ -56,8 +55,10 @@ namespace insecure_bank_net.Facade
 
             var cashAccountId = cashAccountDao.GetIdFromNumber(transfer.FromAccount);
 
+            var creditAccountDao = CreditAccountDao;
             creditAccountDao.UpdateCreditAccount(cashAccountId, InsecureBankUtils.Round(amountTotal, 2));
 
+            var activityDao = ActivityDao;
             var desc = transfer.Description.Length > 12
                 ? transfer.Description.Substring(0, 12)
                 : transfer.Description;
@@ -69,16 +70,20 @@ namespace insecure_bank_net.Facade
 
         private void UpdateToAccounts(Transfer transfer)
         {
+            var cashAccountDao = CashAccountDao;
+
             var toCashAccountId = cashAccountDao.GetIdFromNumber(transfer.ToAccount);
             if (toCashAccountId <= 0)
             {
                 return;
             }
 
+            var creditAccountDao = CreditAccountDao;
             var actualAmount = cashAccountDao.GetFromAccountActualAmount(transfer.ToAccount);
             var amountTotal = actualAmount + transfer.Amount;
             creditAccountDao.UpdateCreditAccount(toCashAccountId, InsecureBankUtils.Round(amountTotal, 2));
 
+            var activityDao = ActivityDao;
             var desc = transfer.Description;
             activityDao.InsertNewActivity(transfer.Date, "TRANSFER: " + desc, transfer.ToAccount,
                 InsecureBankUtils.Round(transfer.Amount, 2), InsecureBankUtils.Round(amountTotal, 2));
