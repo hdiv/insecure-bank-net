@@ -16,6 +16,7 @@ namespace insecure_bank_net.Pages.User
 {
     public class UserDetail : PageModel
     {
+        private static readonly char SP = Path.DirectorySeparatorChar;
         private readonly IWebHostEnvironment environment;
         private readonly IAuthenticationFacade authenticationFacade;
         private readonly IAccountDao accountDao;
@@ -55,16 +56,16 @@ namespace insecure_bank_net.Pages.User
 
         public IActionResult OnGetCreditCardImage(string name)
         {
-            var stream = new FileStream(environment.WebRootPath + $"\\img\\creditCards/{name}", FileMode.Open);
+            var stream = new FileStream(environment.WebRootPath + $"{SP}img{SP}creditCards{SP}{name}", FileMode.Open);
             return File(stream, "image/png", name);
         }
 
         public IActionResult OnGetAvatar(string name)
         {
-            var image = $"\\img\\avatars\\{name}";
+            var image = $"{SP}img{SP}avatars{SP}{name}";
             var file = storageFacade.Exists(image)
                 ? storageFacade.Load(image)
-                : storageFacade.Load("\\img\\avatars\\avatar.png");
+                : storageFacade.Load($"{SP}img{SP}avatars{SP}avatar.png");
             return File(file, "image/png", name);
         }
 
@@ -110,7 +111,7 @@ namespace insecure_bank_net.Pages.User
             var username = principal.Identity!.Name;
             if (Upload != null && Upload.Length > 0)
             {
-                storageFacade.Save(Upload.OpenReadStream(), $"\\img\\avatars\\{username}.png");
+                storageFacade.Save(Upload.OpenReadStream(), $"{SP}img{SP}avatars{SP}{username}.png");
             }
 
             return RedirectToPage("/User/UserDetail", new Dictionary<string, string> {{"username", username}});
