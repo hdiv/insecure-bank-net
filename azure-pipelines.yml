@@ -17,7 +17,7 @@ stages:
   jobs:
   - job: Build
     displayName: Build
-    pool: windows-10-machine
+    pool: gorka-Local
     steps:
     - task: Docker@2
       displayName: Build an image
