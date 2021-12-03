@@ -11,14 +11,16 @@ namespace insecure_bank_net.Facade
         private readonly ICashAccountDao cashAccountDao;
         private readonly ICreditAccountDao creditAccountDao;
         private readonly IActivityDao activityDao;
+        private readonly ITransferDao transferDao;
 
         public TransferFacadeImpl(ApplicationDbContext dbContext, ICashAccountDao cashAccountDao,
-            ICreditAccountDao creditAccountDao, IActivityDao activityDao)
+            ICreditAccountDao creditAccountDao, IActivityDao activityDao, ITransferDao transferDao)
         {
             this.dbContext = dbContext;
             this.cashAccountDao = cashAccountDao;
             this.creditAccountDao = creditAccountDao;
             this.activityDao = activityDao;
+            this.transferDao = transferDao;
         }
 
         public void CreateNewTransfer(Transfer transfer)
@@ -41,7 +43,7 @@ namespace insecure_bank_net.Facade
 
         private void InsertTransfer(Transfer transfer)
         {
-            new TransferDaoImpl(dbContext).InsertTransfer(transfer);
+            transferDao.InsertTransfer(transfer);
         }
 
         private void UpdateFromAccounts(Transfer transfer)
